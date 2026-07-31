@@ -1,0 +1,9 @@
+cases:
+  - id: sample-roster
+    query: 社員名簿について何を確認した？
+    project: npo
+    expected_sources:
+      - nagao.md
+    expected_keywords:
+      - 社員名簿
+      - 確認

@@ -1,0 +1,56 @@
+cases:
+  - id: roster-check-1
+    query: 社員名簿について何を確認した？
+    project: npo
+    expected_sources:
+      - nagao.md
+    expected_keywords:
+      - 社員名簿
+      - 確認
+  - id: roster-check-2
+    query: 社員名簿の確認対象は何？
+    project: npo
+    expected_sources:
+      - nagao.md
+    expected_keywords:
+      - 社員名簿
+  - id: interview-notes-1
+    query: 面談メモの確認事項を要約して
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-1
+    query: 長尾さんとのメモにある主要トピックは？
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-2
+    query: 社員名簿という語が出てくる資料は？
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-3
+    query: 名簿確認に関する記述を探して
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-4
+    query: roster confirmation に近い内容はある？
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-5
+    query: employee roster についての記録は？
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-6
+    query: 確認対象の資料名は何？
+    project: npo
+    expected_sources:
+      - nagao.md
+  - id: source-grounding-7
+    query: 面談メモから社員名簿関連の話題を抜き出して
+    project: npo
+    expected_sources:
+      - nagao.md

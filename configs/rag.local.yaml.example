@@ -1,0 +1,6 @@
+rag:
+  embedding_provider: openai_compatible
+  embedding_model_alias: embedding
+  reranker_provider: openai_compatible
+  reranker_model_alias: reranker
+  reranker_endpoint_path: /rerank

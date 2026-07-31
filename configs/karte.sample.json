@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "npo-board-meeting",
+      "title": "NPO Board Meeting",
+      "body": "Employee roster was confirmed and onboarding tasks were assigned.",
+      "project": "npo",
+      "tags": ["meeting", "roster"],
+      "source_uri": "karte://npo/board-meeting"
+    },
+    {
+      "id": "research-note-vector-search",
+      "title": "Research Note",
+      "body": "Vector search tuning notes for chunk overlap and reranking.",
+      "project": "research",
+      "tags": ["research", "rag"],
+      "source_uri": "karte://research/vector-search"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Frontend / Wails build output
+desktop/frontend/node_modules/
+desktop/frontend/dist/
+desktop/frontend/package.json.md5
+desktop/build/bin/
+desktop/bin/
+node_modules/
+dist/
+build/
+
+# Local runtimes, models, and third-party source trees
+llama.cpp/
+models/
+bin/
+tools/
+*.gguf
+*.safetensors
+*.tar.gz
+
+# Local data and generated artifacts
+data/cache/
+data/exports/
+data/index/*
+!data/index/.gitkeep
+data/logs/
+data/runtime/
+tmp/
+LW_data/
+.qdrant-initialized
+.coverage
+coverage.out
+
+# Local configuration and secrets
+configs/*.local.yaml
+configs/*.local.yml
+configs/*.local.json
+configs/*.bak.*
+.env
+.env.*
+!.env.example
+*.pid
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

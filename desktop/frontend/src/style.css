@@ -1,0 +1,14 @@
+html {
+    background-color: #f6f4ef;
+    color: #0d0f14;
+}
+
+body {
+    margin: 0;
+    color: #0d0f14;
+    font-family: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
+}
+
+#app {
+    height: 100vh;
+}

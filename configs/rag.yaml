@@ -1,0 +1,18 @@
+rag:
+  chunk_size: 1200
+  chunk_overlap: 150
+  top_k: 30
+  rerank_k: 8
+  context_max_tokens: 12000
+  embedding_provider: local_hash
+  embedding_model_alias: embedding
+  embedding_dimensions: 64
+  reranker_provider: local_overlap
+  reranker_model_alias: reranker
+  reranker_endpoint_path: /rerank
+
+vector_db:
+  provider: local_json
+  url: http://localhost:6333
+  collection: local_docs
+  store_path: data/index/local_docs.json

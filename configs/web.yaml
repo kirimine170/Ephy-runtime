@@ -1,0 +1,13 @@
+web_search:
+  # External network access remains opt-in until the local SearXNG runtime is installed.
+  enabled: false
+  provider: searxng
+  base_url: http://127.0.0.1:8888
+  engine: duckduckgo
+  max_results: 5
+  safe_search: 1
+  timeout_seconds: 8
+  plan_ttl_seconds: 300
+  max_query_chars: 240
+  max_snippet_chars: 600
+  max_context_chars: 4000

@@ -1,0 +1,20 @@
+routes:
+  fast:
+    model: fast
+    rag: false
+
+  work:
+    model: work
+    rag: false
+
+  code:
+    model: code
+    rag: false
+
+  rag:
+    model: work
+    rag: true
+
+  auto:
+    strategy: rule_based
+

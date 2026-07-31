@@ -1,0 +1,10 @@
+models:
+  embedding:
+    provider: llama_cpp
+    model: qwen3-embedding-0.6b
+    base_url: http://localhost:8090/v1
+
+  reranker:
+    provider: openai_compatible
+    model: qwen3-reranker-0.6b
+    base_url: http://localhost:8100/v1
