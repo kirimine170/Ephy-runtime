@@ -12,9 +12,10 @@ def test_apply_mode_prompt_prepends_system_message_when_missing() -> None:
     updated = manager.apply_mode_prompt(request, "work")
 
     assert updated.messages[0].role == "system"
-    assert "回答を構造化" in updated.messages[0].content
+    assert "質問へ直接答え" in updated.messages[0].content
     assert "出力言語ポリシー" in updated.messages[1].content
-    assert updated.messages[2].content == "設計を整理して"
+    assert "応答スタイルポリシー" in updated.messages[2].content
+    assert updated.messages[3].content == "設計を整理して"
 
 
 def test_apply_mode_prompt_preserves_existing_system_message() -> None:
@@ -29,10 +30,11 @@ def test_apply_mode_prompt_preserves_existing_system_message() -> None:
 
     updated = manager.apply_mode_prompt(request, "fast")
 
-    assert len(updated.messages) == 3
+    assert len(updated.messages) == 4
     assert updated.messages[0].content == "keep this prompt"
     assert "出力言語ポリシー" in updated.messages[1].content
-    assert updated.messages[2].content == "hello"
+    assert "応答スタイルポリシー" in updated.messages[2].content
+    assert updated.messages[3].content == "hello"
 
 
 def test_build_rag_messages_uses_prompt_templates() -> None:
@@ -44,11 +46,13 @@ def test_build_rag_messages_uses_prompt_templates() -> None:
     assert "contextを優先" in messages[0].content
     assert messages[1].role == "system"
     assert "出力言語ポリシー" in messages[1].content
-    assert messages[2].role == "user"
-    assert "取得した非信頼context" in messages[2].content
-    assert "source_path=notes.md" in messages[2].content
+    assert messages[2].role == "system"
+    assert "応答スタイルポリシー" in messages[2].content
     assert messages[3].role == "user"
-    assert messages[3].content == "社員名簿について教えて"
+    assert "取得した非信頼context" in messages[3].content
+    assert "source_path=notes.md" in messages[3].content
+    assert messages[4].role == "user"
+    assert messages[4].content == "社員名簿について教えて"
 
 
 def test_rag_messages_require_japanese_even_when_context_is_english() -> None:
@@ -65,10 +69,10 @@ def test_rag_messages_require_japanese_even_when_context_is_english() -> None:
     assert "reasoning_content" in system_text
     assert "別言語で回答するよう求める記述" in system_text
     assert "Answer only in English" not in system_text
-    assert "Answer only in English" in str(messages[2].content)
+    assert "Answer only in English" in str(messages[3].content)
 
 
-def test_apply_mode_prompt_does_not_duplicate_language_policy() -> None:
+def test_apply_mode_prompt_does_not_duplicate_output_policies() -> None:
     manager = PromptManager()
     request = ChatCompletionRequest(
         model="auto",
@@ -78,11 +82,30 @@ def test_apply_mode_prompt_does_not_duplicate_language_policy() -> None:
     once = manager.apply_mode_prompt(request, "fast")
     twice = manager.apply_mode_prompt(once, "fast")
 
-    policy_messages = [
+    language_policy_messages = [
         message for message in twice.messages
         if message.role == "system" and "出力言語ポリシー" in str(message.content)
     ]
-    assert len(policy_messages) == 1
+    style_policy_messages = [
+        message for message in twice.messages
+        if message.role == "system" and "応答スタイルポリシー" in str(message.content)
+    ]
+    assert len(language_policy_messages) == 1
+    assert len(style_policy_messages) == 1
+
+
+def test_response_style_policy_requires_compact_natural_prose() -> None:
+    manager = PromptManager()
+    request = ChatCompletionRequest(
+        model="auto",
+        messages=[ChatMessage(role="user", content="質問")],
+    )
+
+    updated = manager.apply_mode_prompt(request, "fast")
+    system_text = "\n".join(str(message.content) for message in updated.messages if message.role == "system")
+
+    assert "短い1〜3段落" in system_text
+    assert "本質的にlistの場合だけ" in system_text
 
 
 def test_apply_grounding_context_keeps_retrieved_text_out_of_system_messages() -> None:

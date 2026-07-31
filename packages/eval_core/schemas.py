@@ -9,6 +9,9 @@ class EvalCase(BaseModel):
     expected_sources: list[str] = Field(default_factory=list)
     expected_keywords: list[str] = Field(default_factory=list)
     project: str | None = None
+    max_answer_characters: int = Field(default=1200, ge=1)
+    max_bullets: int = Field(default=6, ge=0)
+    max_headings: int = Field(default=3, ge=0)
 
 
 class EvalCaseResult(BaseModel):
@@ -25,6 +28,11 @@ class EvalCaseResult(BaseModel):
     prompt_tokens: int | None = None
     completion_tokens: int | None = None
     total_tokens: int | None = None
+    style_pass: bool | None = None
+    style_violations: list[str] = Field(default_factory=list)
+    answer_characters: int | None = None
+    bullet_count: int | None = None
+    heading_count: int | None = None
 
 
 class EvalReport(BaseModel):
@@ -38,4 +46,5 @@ class EvalReport(BaseModel):
     total_prompt_tokens: int | None = None
     total_completion_tokens: int | None = None
     total_tokens: int | None = None
+    style_pass_rate: float | None = None
     results: list[EvalCaseResult] = Field(default_factory=list)

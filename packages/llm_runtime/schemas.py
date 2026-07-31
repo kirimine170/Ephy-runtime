@@ -34,6 +34,7 @@ class ChatCompletionRequest(BaseModel):
     max_tokens: int | None = None
     stream: bool = False
     metadata: RequestMetadata | None = None
+    chat_template_kwargs: dict[str, Any] | None = None
 
 
 class EmbeddingRequest(BaseModel):

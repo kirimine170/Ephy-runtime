@@ -87,8 +87,11 @@ class LlamaCppChatAdapter:
     ) -> dict:
         body = request_payload.model_dump(exclude_none=True)
         body["model"] = model_config.model
-        if "metadata" in body:
-            body.pop("metadata")
+        metadata = body.pop("metadata", {})
+        if metadata.get("mode") == "fast":
+            template_kwargs = dict(body.get("chat_template_kwargs") or {})
+            template_kwargs["enable_thinking"] = False
+            body["chat_template_kwargs"] = template_kwargs
         if "temperature" not in body and model_config.default_temperature is not None:
             body["temperature"] = model_config.default_temperature
         return body

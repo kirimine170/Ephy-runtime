@@ -11,6 +11,7 @@ from packages.rag_core.schemas import RAGQueryRequest, SearchRequest
 from packages.rag_core.service import RagService
 from packages.router_core.router import ModelRouter
 from .schemas import EvalCase, EvalCaseResult, EvalReport
+from .style import assess_response_style
 
 
 class EvalRunner:
@@ -47,6 +48,7 @@ class EvalRunner:
                 prompt_tokens = None
                 completion_tokens = None
                 total_tokens = None
+                style_assessment = None
                 if with_answer and adapter is not None:
                     query_response = await self._rag_service.query(
                         payload=RAGQueryRequest(
@@ -66,6 +68,12 @@ class EvalRunner:
                     prompt_tokens = self._safe_int(usage.get("prompt_tokens"))
                     completion_tokens = self._safe_int(usage.get("completion_tokens"))
                     total_tokens = self._safe_int(usage.get("total_tokens"))
+                    style_assessment = assess_response_style(
+                        answer,
+                        max_characters=case.max_answer_characters,
+                        max_bullets=case.max_bullets,
+                        max_headings=case.max_headings,
+                    )
 
                 latency_ms = round((perf_counter() - started_at) * 1000, 2)
 
@@ -82,6 +90,11 @@ class EvalRunner:
                         prompt_tokens=prompt_tokens,
                         completion_tokens=completion_tokens,
                         total_tokens=total_tokens,
+                        style_pass=style_assessment.passed if style_assessment else None,
+                        style_violations=list(style_assessment.violations) if style_assessment else [],
+                        answer_characters=style_assessment.character_count if style_assessment else None,
+                        bullet_count=style_assessment.bullet_count if style_assessment else None,
+                        heading_count=style_assessment.heading_count if style_assessment else None,
                     )
                 )
         finally:
@@ -102,6 +115,10 @@ class EvalRunner:
         total_prompt_tokens = self._sum_optional_int(item.prompt_tokens for item in results)
         total_completion_tokens = self._sum_optional_int(item.completion_tokens for item in results)
         total_tokens = self._sum_optional_int(item.total_tokens for item in results)
+        style_values = [item.style_pass for item in results if item.style_pass is not None]
+        style_pass_rate = None
+        if style_values:
+            style_pass_rate = self._rate(sum(1 for item in style_values if item), len(style_values))
 
         return EvalReport(
             dataset_path=str(Path(dataset_path).resolve()),
@@ -112,6 +129,7 @@ class EvalRunner:
             total_prompt_tokens=total_prompt_tokens,
             total_completion_tokens=total_completion_tokens,
             total_tokens=total_tokens,
+            style_pass_rate=style_pass_rate,
             results=results,
         )
 

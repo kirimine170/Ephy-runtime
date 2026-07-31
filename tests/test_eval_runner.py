@@ -129,5 +129,8 @@ cases:
     assert report.total_prompt_tokens == 11
     assert report.total_completion_tokens == 7
     assert report.total_tokens == 18
+    assert report.style_pass_rate == 1.0
     assert report.results[0].latency_ms is not None
     assert report.results[0].total_tokens == 18
+    assert report.results[0].style_pass is True
+    assert report.results[0].style_violations == []

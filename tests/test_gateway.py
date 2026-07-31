@@ -178,7 +178,8 @@ def test_chat_endpoint_injects_mode_prompt_when_missing() -> None:
     assert response.status_code == 200
     sent_request = captured["request_payload"]
     assert sent_request.messages[0].role == "system"
-    assert "回答を構造化" in sent_request.messages[0].content
+    assert "質問へ直接答え" in sent_request.messages[0].content
+    assert any("応答スタイルポリシー" in message.content for message in sent_request.messages if message.role == "system")
     assert any("出力言語ポリシー" in str(message.content) for message in sent_request.messages if message.role == "system")
     assert sent_request.messages[-1].content == "設計を整理して"
 

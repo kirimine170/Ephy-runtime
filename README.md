@@ -421,13 +421,16 @@ Wails UI では以下を操作できる。
 mode 別の system prompt と RAG answer 用 prompt は `prompts/` 配下で管理する。
 
 - `language_ja.md`
+- `response_style_ja.md`
 - `system_fast.md`
 - `system_work.md`
 - `system_code.md`
 - `rag_answer.md`
 - `rag_user.md`
 
-chat completion では mode に応じて system prompt を自動補完し、RAG answer では template を使って context 付き prompt を組み立てる。`language_ja.md` は通常chat、RAG、Web検索fallbackのすべてに適用され、取得文書が英語でもユーザー向けの回答・説明・要約は日本語に固定する。コード、識別子、source ID、必要な短い原文引用は正確性のため原表記を維持する。
+chat completionではmodeに応じてsystem promptを自動補完し，RAG answerではtemplateを使ってcontext付きpromptを組み立てる．`language_ja.md`は通常chat，RAG，Web検索fallbackのすべてに適用され，取得文書が英語でもユーザー向けの回答，説明，要約は日本語に固定する．`response_style_ja.md`は，質問へ直接答える，既定は短い1〜3段落にする，不要な見出しや箇条書きを避ける，という応答契約を全modeへ適用する．コード，識別子，source ID，必要な短い原文引用は正確性のため原表記を維持する．
+
+`fast` modeはllama.cppのthinkingを無効化し，短い質問でreasoningがcompletion budgetを使い切ることを防ぐ．`work`，`rag`，`code`はthinkingを維持し，速度より検討の深さを優先する．
 
 Runtime タブでは:
 
@@ -504,6 +507,8 @@ Runtime タブでは:
 ```
 
 `--with-answer` を付けると、RAG answer まで呼んでキーワード確認も行う。これは backend model が起動している前提。
+
+answer付きevalでは，source hit，keyword，latency，token使用量に加えて，回答文字数，見出し数，箇条書き数と`style_pass_rate`を記録する．caseごとに`max_answer_characters`，`max_bullets`，`max_headings`を上書きできる．
 
 ## Document Ingest
 
