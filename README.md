@@ -26,7 +26,7 @@ packages/llm_runtime/   llama.cpp / OpenAI 互換アダプタ
 packages/prompt_core/   prompt template 読込
 packages/rag_core/      将来用の RAG 置き場
 packages/eval_core/     評価基盤
-packages/tool_core/     将来用の tool interface 置き場
+packages/tool_core/     Agent tool権限・承認・監査contract
 tests/                  phase1 テスト
 desktop/                Wails デスクトップ UI
 configs/                モデルとルーティング設定
