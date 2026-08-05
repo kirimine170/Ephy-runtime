@@ -4,6 +4,8 @@ Phase 1 の実装に加えて、Phase 2 の入口と Go + Wails デスクトッ�
 
 タスク管理、会話方針、Git運用、標準testは [`docs/WORKFLOW.md`](docs/WORKFLOW.md) を参照する。
 
+EphyのIdentity，Profile，Memory，Growth及びInstance Lifecycleの設計は，[`docs/design/`](docs/design/README.md)を正本とする．設計判断と理由は，[`docs/adr/`](docs/adr/README.md)で管理する．
+
 ## 含まれるもの
 
 - FastAPI ベースの Gateway
