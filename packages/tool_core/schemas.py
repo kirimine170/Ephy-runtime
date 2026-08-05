@@ -126,3 +126,22 @@ class ToolAuditEvent(BaseModel):
     duration_ms: float | None = Field(default=None, ge=0)
     output_truncated: bool = False
     error_code: str | None = None
+
+
+class ToolExecutionResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    invocation_id: str
+    tool_name: str
+    status: ToolResultStatus
+    output: dict[str, JsonValue] = Field(default_factory=dict)
+    output_truncated: bool = False
+    error_code: str | None = None
+
+
+class ToolExecutionRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    decision: ToolDecision
+    result: ToolExecutionResult
+    audit_event: ToolAuditEvent
