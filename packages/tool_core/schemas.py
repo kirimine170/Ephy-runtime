@@ -145,3 +145,12 @@ class ToolExecutionRecord(BaseModel):
     decision: ToolDecision
     result: ToolExecutionResult
     audit_event: ToolAuditEvent
+
+
+class ToolMutationPlan(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    invocation: ToolInvocation
+    decision: ToolDecision
+    preview: dict[str, JsonValue] = Field(default_factory=dict)
+    error_code: str | None = None
