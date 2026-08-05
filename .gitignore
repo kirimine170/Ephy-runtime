@@ -33,6 +33,10 @@ data/index/*
 !data/index/.gitkeep
 data/logs/
 data/runtime/
+data/private/
+instances/
+datasets/private/
+models/private/
 tmp/
 LW_data/
 .qdrant-initialized
@@ -49,6 +53,11 @@ configs/*.bak.*
 !.env.example
 *.pid
 *.log
+*.identity.yaml
+*.private.yaml
+*.key
+*.pem
+*.secret
 
 # OS / editor
 .DS_Store
