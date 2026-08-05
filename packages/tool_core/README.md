@@ -126,6 +126,14 @@ if record.decision.decision == "allow" and record.result.status == "succeeded":
 append_metadata_only_audit(record.audit_event)
 ```
 
+## Approved Mutation Tools
+
+T-035では`files.write`と`process.run`を`MutationToolExecutor`から提供する．どちらも`approval_policy=always`であり，`plan()`が返すprepared invocationのhashに対するone-shot grantがなければ`execute()`は実行しない．grantは`InMemoryApprovalStore`内のlock下で実行開始時に消費され，同じ承認を並列実行やretryへ再利用できない．
+
+`files.write`は現在内容のSHA-256とunified diffをpreviewへ含める．承認後にhashを再検査し，同じdirectory内のtemporary fileを`fsync`してから`os.replace`する．新規fileは`expected_sha256=null`，既存fileはpreview時のhashがexact matchしなければならない．delete，move，recursive write，binary writeは対象外とする．
+
+`process.run`はshell文字列ではなく`argv[]`だけを受け取る．実行fileはabsolute path，cwdは許可workspace内，environmentは`LANG`，`LC_ALL`，`NO_COLOR`，`PYTHONUTF8`，`TZ`だけを追加可能とする．macOSでは`sandbox-exec`でnetwork，workspace外のuser data read，workspace外writeを拒否する．timeout時はprocess groupを終了し，stdout／stderrは合計byte上限まで読み取る．対応sandboxがないplatformでは安全側に倒して`sandbox_unavailable`で拒否する．
+
 ## 後続タスクの完了条件
 
 - `T-034`: read-only file/search/git toolが許可root，symlink，sensitive path testを通る．
